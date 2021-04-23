@@ -8,8 +8,11 @@ import QuestionCard from './components/QuestionCard'
 // types
 import { Difficulty, QuestionState } from './Api'
 
+// styles
+import { GlobalStyle, Wrapper } from './App.styles'
 
-type AnswerObject = {
+
+export type AnswerObject = {
   question: string;
   answer: string;
   correct: boolean;
@@ -43,7 +46,7 @@ const App = () => {
     setIsLoading(false)
   }
 
-  const checkAnwer = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const checkAnwer = (event: React.MouseEvent<HTMLButtonElement>): void => {
     if (!gameOver) {
       // user answer
       const answer = event.currentTarget.value
@@ -76,32 +79,35 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h1>Quiz</h1>
-      {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
-        <button className={`start`} onClick={startQuiz}>Start Quiz</button>
-      ) : null}
+    <>
+      <GlobalStyle />
+      <Wrapper>
+        <h1>Quiz</h1>
+        {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
+          <button className={`start`} onClick={startQuiz}>Start Quiz</button>
+        ) : null}
 
-      {!gameOver ? <p className={`score`}>Score:</p> : null }
-      
-      {isLoading && <p>Loading Questions...</p>}
-      
-      {!isLoading && !gameOver && (
-        <QuestionCard 
-          questionNr={number + 1}
-          totalQuestions={TOTAL_QUESTIONS}
-          question={questions[number].question}
-          answers={questions[number].answers}
-          userAnswer={userAnswers ? userAnswers[number] : undefined}
-          callback={checkAnwer}
-        />
-      )}
+        {!gameOver ? <p className={`score`}>Score: {score}</p> : null }
+        
+        {isLoading && <p>Loading Questions...</p>}
+        
+        {!isLoading && !gameOver && (
+          <QuestionCard 
+            questionNr={number + 1}
+            totalQuestions={TOTAL_QUESTIONS}
+            question={questions[number].question}
+            answers={questions[number].answers}
+            userAnswer={userAnswers ? userAnswers[number] : undefined}
+            callback={checkAnwer}
+          />
+        )}
 
-      {!gameOver && !isLoading && userAnswers.length === number + 1 && number !== TOTAL_QUESTIONS - 1 ? (
-        <button className={`next`} onClick={nextQusetion}>Next Question</button>
-      ) : null }
-      
-    </div>
+        {!gameOver && !isLoading && userAnswers.length === number + 1 && number !== TOTAL_QUESTIONS - 1 ? (
+          <button className={`next`} onClick={nextQusetion}>Next Question</button>
+        ) : null }
+        
+      </Wrapper>
+    </>
   );
 }
 
